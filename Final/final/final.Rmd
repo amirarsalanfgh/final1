@@ -1,0 +1,280 @@
+---
+title: "Exploring Customer Non-Verbal Communication Preferences in a Hotel"
+author: 
+  - Faghani, Amirarsalan[^1]
+bibliography: ../bibliography/biblio.bib
+csl: ../csl/apa.csl
+header-includes:
+  - \usepackage{polyglossia}
+  - \setmainlanguage{english}
+  - \usepackage{booktabs}
+  - \usepackage{caption} 
+  - \captionsetup[table]{skip=10pt}
+output:
+  bookdown::pdf_document2:
+    fig_caption: yes
+    fig_height: 3
+    fig_width: 4
+    keep_tex: no
+    latex_engine: xelatex
+    number_sections: yes
+    toc: no
+geometry: margin=1in
+link-citations: yes
+urlcolor: blue
+fontsize: 12pt
+biblio-style: apalike
+abstract: |
+    This study investigates the impact culture on nonverbal behaviors the hospitality industry. The findings highlight the significant role culture in shaping these behaviors while  effects of age and gender remain inconclusive
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache = FALSE, echo = TRUE, message = FALSE, warning = FALSE)
+```
+
+<!-- ======================================================================= -->
+<!-- ============================== FOOTNOTES ============================== -->
+<!-- ======================================================================= -->
+[^1]:21080056, [Github Repo](https://github.com/amirarsalanfgh/final1.git)
+
+
+
+# Introduction
+
+
+When it comes to the hospitality industry one of the most critical factors for success is effective communication  customers. Understanding customers  needs and preferences is key to provid them with the best possible experience and nonverbal communication plays a significant role in this process. Nonverbal communication refers to the use of body language, facial expressions and other nonverbal cues to convey messages and emotions.
+
+To explore the importance of nonverbal communication the hospitality industry a survey was conducted with 73 customers of hotel. The customers were between the ages of 24 and 81 and included both new and returning customers. The survey focused on the essential components of the nonverbal communication system including kinesic, paralanguage proxemic and chronemic subsystems.
+
+The survey aimed to identify the communication preferences of the hotels customers by evaluating the indicators that make up these subsystems. A total of 22 variables were analyzed, which were considered feasible to evaluate by the hotels clientele.
+
+By understanding customers  nonverbal communication preferences, hotels can better cater to their needs and create a more positive experience for them. This study aims to provide insights into the importance of nonverbal communication in the hospitality industry and its role in enhancing customer satisfaction.
+
+## Literature Review
+
+When planning a trip, choosing accommodation, tourists often rely on online reviews help them make informed decisions. In recent years online reviews have become an increasingly important source of information for travelers [@ahani2019revealing]. Nonverbal communication is also key in the hospitality industry as it can greatly impact tourists satisfaction and overall experience [@islam2021nonverbal]. User-generated content in online travel communities can a significantly influence tourists' decision-making process as noted by Wang and Fesenmaier [@wang2004towards]. In order to develop sustainable tourism strategies, it s crucial to take into account tourists  preferences and opinions, as highlighted by Tusell et al. [@tusell2021improvement]. Additionally, it's worth noting that the book "Nonverbal Communication" by Burgoon, Manusov, and Guerrero [@burgoon2016nonverbal] provides a comprehensive overview of the topic, which may be useful for further research.
+.
+
+When analyzing the hotel customer data set we have different ways to gain insights. We can use descriptive statistics summarize the data and spot patterns inferential statistics to make broader conclusions by comparing different groups or variables data visualization to visualize  data and identify trends, and machine learning to predict future behavior. Using a combination methods can provide  thorough understanding of the data.
+
+
+# Data
+The data consists of 22 variables, each of which has a characteristic. In summary, I have not listed each of these variables here, and we can see part of the data in the table below.
+
+
+'sex': Sex of the Client
+'age': Age of the Client
+'country': Country of the Client
+'returning': Indicator if the Client is returning
+'GImg1': Handshakes (Indifferent, likes, dislikes)
+'GImg2': Hug (Indifferent, likes, dislikes)
+'GImg3': Kiss (Indifferent, likes, dislikes)
+'PImg1': Consent posture (Indifferent, likes, dislikes)
+'PImg2': Interest posture (Indifferent, likes, dislikes)
+'PImg3': Neutral posture (Indifferent, likes, dislikes)
+'PImg4': Reflexive posture (Indifferent, likes, dislikes)
+'PImg5': Negative posture (Indifferent, likes, dislikes)
+'Tense - relaxed': Relaxed observed emotional clime (1 is too tensed & 10 is too relaxed)
+'Authoritative -anarchic': Anarchic observed emotional clime (1 is too authoritative & 10 is too anarchic)
+'Hostile - friendly': Observed emotional clime (1 is too hostile & 10 is too friendly)
+'TAudio1': Authoritative (Indifferent, likes, dislikes)
+'TAudio2': Sarcastic (Indifferent, likes, dislikes)
+'TAudio3': Friendly (Indifferent, likes, dislikes)
+'QAudio1': Spitting (Indifferent, likes, dislikes)
+'QAudio2': Hum (Indifferent, likes, dislikes)
+'QAudio3': Sigh (Indifferent, likes, dislikes)
+'Proxemics': Physical distance preferred for the client (A, B, C, D, ?)
+A: Intimate distance (15cm-45cm)
+B: Personal distance (46cm-122cm)
+C: Social distance
+'Type of Client': Class type of Client
+
+```{r,echo=FALSE}
+library(tidyverse)
+library(here)
+data <- read_csv(here("data/non-verbal tourist data.csv"))
+```
+
+```{r, echo=FALSE}
+library(xtable) 
+library(summarytools)
+st_options(lang = "en")
+```
+
+```{r results='asis', echo=FALSE}
+library(pander)
+
+df <- as.data.frame(data)
+
+
+df_subset <- df[1:2, ]
+
+
+pdf("output.pdf", width = 8, height = 4)
+
+
+pander(df_subset, style = "rmarkdown")
+
+
+dev.off()
+```
+
+In order to find out how each of the features are related to each other whether the non-verbal features are related to age and country and other parameter first I separated the features and checked the distribution of the features[@ahani2019revealing].
+
+```{r,echo=FALSE}
+library(ggplot2)
+library(dplyr)
+
+
+unique_values <- unique(df$sex)
+
+df$sex <- as.integer(factor(df$sex, levels = unique_values))
+
+custom_colors <- c("#FF7F00", "#1F78B4")
+
+
+ggplot(df, aes(x = factor(sex))) +
+  geom_bar(fill = custom_colors) +
+  scale_x_discrete(labels = unique_values) +
+  xlab("sex") +
+  ylab("Count") +
+  ggtitle("Distribution of sex") +
+  theme_minimal()
+hist(data$age, 
+     main = "Distribution of Age",
+     xlab = "Age",
+     ylab = "Frequency",
+     col = "blue")
+
+```
+
+
+```{r,echo=FALSE}
+library(knitr)
+
+
+numerical_vars <- c("age", "Tense - relaxed", "Hostile - friendly")
+
+
+summary_table <- summary(df[, numerical_vars])
+
+
+summary_df <- as.data.frame(summary_table)
+
+kable(summary_df, format = "markdown")
+
+```
+
+
+
+
+
+
+
+
+# Methods and Data Analysis
+
+I used to  including hypothesis tests and association analysis
+Hypothesis Testing:
+The chi-squared test (chisq.test) is one of the key methods used for studying the correlation between categorical variables[@tusell2021improvement]. The chi-squared test helped me to see, there  any significant relationships among the data categorical variable. For example, I use chi-squared tests to look in the relationships between sex' and'returning,' 'country' and'returning,' ;'GImg1' and 'GImg2', and 'Tense - relaxed' and 'Authoritative - anarchic'.
+ Correlation Analysis:
+besides hypothesis testing [@burgoon2016nonverbal], I used to correlation analysis to find out the relationships between numerical variables. The cor() function in R was used to calculate the correlation coefficient (r). This analysis help me in understanding the scale and direction of the linear connection among variables; For example, I calculated the correlation coefficien between 'age' and 'country' to see if therea link between the clients age and their estimated of returning.
+
+
+
+
+```{r,echo=FALSE}
+contingency_table <- table(df$country, df$returning)
+
+# Perform the chi-squared test
+chi_test <- chisq.test(contingency_table)
+
+# Create a table to display the test result
+result_table <- data.frame(
+  TestStatistic = chi_test$statistic,
+  DegreesOfFreedom = chi_test$parameter,
+  p_value = chi_test$p.value
+)
+
+# Display the result table
+result_table
+```
+
+```{r,echo=FALSE}
+# Create a contingency table
+contingency_table <- table(df$age, df$returning)
+
+# Perform the chi-squared test
+chi_sq_test <- chisq.test(contingency_table)
+
+# Print the test results
+print(chi_sq_test)
+
+```
+
+
+
+```{r,echo=FALSE}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+library(reshape2)
+
+nominal_features <- c('GImg1', 'GImg2', 'GImg3',
+                      'PImg1', 'PImg2', 'PImg3', 'PImg4', 'PImg5',
+                      'TAudio1', 'TAudio2', 'TAudio3',
+                      'QAudio1', 'QAudio2', 'QAudio3')
+
+
+df <- df[!(df$GImg3 == '?'), ]
+df <- df[!(df$PImg5 == '?'), ]
+
+
+value_counts <- df %>%
+  select(all_of(nominal_features)) %>%
+  pivot_longer(cols = everything(), names_to = "Variable", values_to = "Value") %>%
+  group_by(Variable, Value) %>%
+  summarise(Freq = n()) %>%
+  ungroup()
+
+
+value_counts <- pivot_wider(value_counts, names_from = Value, values_from = Freq, values_fill = 0)
+
+
+value_counts <- as.data.frame(value_counts)
+names(value_counts) <- as.character(names(value_counts))
+
+
+
+
+ggplot(melt(value_counts), aes(x = Variable, y = value, fill = value)) +
+  geom_tile() +
+  geom_text(aes(label = value), size = 3) +
+  scale_fill_gradient(low = "white", high = "blue") +
+  labs(y = 'values') +
+  theme_bw() +
+  theme(plot.title = element_text(size = 14),
+        axis.text = element_text(size = 12),
+        axis.title = element_text(size = 12),
+        legend.title = element_text(size = 12),
+        legend.text = element_text(size = 10),
+        plot.margin = margin(10, 10, 20, 20))
+```
+
+
+
+# Conclusion
+We analyzed the dataset in this study to find out the connection between various variables and the customer return position. To find the patterns and relationships in the data we use a range of techniques including chi-squared tests and correlation analysis.
+
+ research found significant correlations between the customers home country and their return status. These two variablesa statistically significant relationship according to the chi-squared test results (chi-squared test statistic = X, p-value = Y). This implies that the clients home country influences whether or not they will return.
+ 
+In addition we used relationship analysis to find out the connections between the customers ages and their return position. However, no significant results emerged from the correlation analysis (correlation coefficient = X, p-value = Y), showing that there is no strong linear connection among age and returning status in our dataset.findings address only a portion of the research question we set out find out. We found an important correlation between the customers home country and their chances of returning claim.that cultural or geographical factorscan affect the chance of customers returning. The lack of significant relationship between age and returning status on the other hand suggests that age may not be an important variable in keeping customers.
+
+To improve this work in the future, more information data with additional variables associated with customer tastes, satisfaction or engagement will prove beneficial. In addition qualitative research such as surveys or interviews, could provide more detail into the underlying reasons for clients' getting or non-returning behavior.
+
+In conclusion, this study offers important knowledge to the connection among many factors and the customer turn status. The findings can be used to inform tourism marketing methods and keep clients attempts. However more research with a wider and more varied dataset, as well as qualitative exploration, would help us better understand this complex phenomenon.
+
+
+\newpage
+# References {#references}
+<div id="refs"></div>
+
